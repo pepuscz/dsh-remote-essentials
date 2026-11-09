@@ -1,0 +1,8 @@
+- id: personal-remote-connector
+  config:
+    hosts: []
+- id: import-claude
+  config:
+    frontendOnly: true
+    importSystemPrompt: false
+    injectTools: off

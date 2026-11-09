@@ -1,0 +1,26 @@
+{
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pepuscz/dsh-remote-essentials.git"
+  },
+  "engines": {
+    "dsh": "0.2.2-rc.1"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
+  "name": "@pepuscz/dsh-remote-essentials-host",
+  "description": "Pinned usage and selective-import backends for a private DSH host"
+}

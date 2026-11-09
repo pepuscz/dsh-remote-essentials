@@ -1,0 +1,5 @@
+- id: import-claude
+  config:
+    frontendOnly: false
+    importSystemPrompt: false
+    injectTools: off
