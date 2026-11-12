@@ -2,7 +2,7 @@
 
 A small, version-pinned setup for using the original DeepSeek Harness desktop app with a private remote DSH host.
 
-**Preview · source installation · not published to npm.** This repository composes three independently maintained plugins. It does not fork the DSH app or install a new background service. Tested against DSH **0.2.2-rc.1**; other versions require a compatibility check.
+**Preview · source installation · not published to npm.** This repository composes three independently maintained plugins. It does not fork the DSH app or install a new background service. Native remote connection verified with DSH **0.2.2-rc.2**; the complete bundle requires a compatibility check for each DSH update.
 
 ## What you get
 
@@ -21,7 +21,7 @@ A small, version-pinned setup for using the original DeepSeek Harness desktop ap
 flowchart LR
   C[Original DSH desktop app] --> L[Local DSH profile]
   C --> P[Authenticated remote connector]
-  P --> T[Private HTTPS endpoint or loopback SSH tunnel]
+  P --> T[Private HTTPS endpoint]
   T --> H[DSH host in dedicated OS account]
   H --> W[Selected project folders and sessions]
   H --> M[Model providers or local inference API]
@@ -60,7 +60,7 @@ Installing does not create accounts, change file permissions, sign into provider
 
 ### Connect your host
 
-Keep the DSH application listener on loopback. For access over a private network, place a certificate-verified HTTPS endpoint in front of it and connect each client to that private network. An SSH local forward remains an alternative. Save the host pairing token in a file **owned by the client OS user and readable only by that user** (mode `0600`); never paste it into a repository or browser URL. The connector obtains its session cookie internally and saves it in that owner-only file, bound to the configured origin. The server-issued session survives ordinary host/client restarts; its expiry remains controlled by DSH and requires re-pairing when expired or revoked.
+Keep the DSH application listener on loopback. For access over a private network, place a certificate-verified HTTPS endpoint in front of it and connect each client to that private network. Save the host pairing token in a file **owned by the client OS user and readable only by that user** (mode `0600`); never paste it into a repository or browser URL. The connector obtains its session cookie internally and saves it in that owner-only file, bound to the configured origin. The server-issued session survives ordinary host/client restarts; its expiry remains controlled by DSH and requires re-pairing when expired or revoked.
 
 Merge this row into the desktop profile's own `cordis.patch.yml`, replacing the example port and token-file path:
 
@@ -70,11 +70,11 @@ Merge this row into the desktop profile's own `cordis.patch.yml`, replacing the 
     hosts:
       - id: remote
         label: Remote
-        origin: http://127.0.0.1:18080
+        origin: https://development.example:19443
         tokenFile: /absolute/path/to/private/host-token
 ```
 
-The port is illustrative. For a private network, set `origin` to its HTTPS endpoint, for example `https://development.example:19443`. Certificates and hostnames are verified normally; there is no insecure TLS mode. Plain HTTP is accepted only on `127.0.0.1` for a same-machine host or the local end of an SSH tunnel. Keep the application and private entry point off public interfaces.
+Set `origin` to your private HTTPS endpoint. Configure the exact hostname and port on the DSH host using its official `--trusted-host` option. Certificates and hostnames are verified normally; there is no insecure TLS mode. Keep the application and private entry point off public interfaces.
 
 Sign into the desired providers on the remote host. The usage plugin reuses the host's supported DSH OAuth records; subscriptions and provider credentials are not included in this bundle. Prefer an independent provider login for each host over copying rotating refresh tokens.
 
@@ -108,10 +108,6 @@ The forks retain the upstream package names so their public integration contract
 
 Composition files are MIT licensed. Each dependency retains its own license. This project is independent of DeepSeek, Anthropic and OpenAI.
 
-## Distribution status
+## Compatibility boundaries
 
-This is a shareable source-install preview, not a published npm package or a one-click machine provisioner. An npm release and optional DSH plugin index can follow after wider compatibility testing. No custom index or marketplace is required for the installation above.
-
-## Verification
-
-The initial pinned composition was installed into clean temporary client and host profiles using the official DSH CLI. Host CLI startup (`--help`) and manifest-policy checks passed. Its component UI was tested in the native desktop app; a fresh end-to-end paired installation on another machine remains a team acceptance check. No npm publication or automatic machine provisioning has been performed.
+This is a source-install preview, not an automatic machine provisioner. Native remote connection, Local/Remote switching and reconnection after a host restart are checked. A fresh installation on a second machine still needs end-to-end verification. Native OS integrations may execute on the client; media and artifact behavior are not fully qualified across machines.
