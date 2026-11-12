@@ -7,7 +7,7 @@ A small, version-pinned setup for using the original DeepSeek Harness desktop ap
 ## What you get
 
 - One-click **Local / Remote** switching within the original desktop window.
-- Compact **Claude / Codex account usage**, with reset countdown and exact local reset date in a tooltip. Providers without a supported usage API render no usage row.
+- Compact **Claude / Codex account usage**, with reset countdown and exact local reset date in a tooltip. When figures are unavailable, a small neutral icon keeps the plugin discoverable; details stay in its tooltip.
 - **More → Import Sessions** for selective history imports, with project grouping and path remapping supported by the importer. Importing history does not copy project files or synchronize future conversations back to the original tool.
 
 | Install on | Contents |
