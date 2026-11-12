@@ -21,7 +21,7 @@ A small, version-pinned setup for using the original DeepSeek Harness desktop ap
 flowchart LR
   C[Original DSH desktop app] --> L[Local DSH profile]
   C --> P[Authenticated remote connector]
-  P --> T[Loopback endpoint or SSH tunnel]
+  P --> T[Private HTTPS endpoint or loopback SSH tunnel]
   T --> H[DSH host in dedicated OS account]
   H --> W[Selected project folders and sessions]
   H --> M[Model providers or local inference API]
@@ -60,7 +60,7 @@ Installing does not create accounts, change file permissions, sign into provider
 
 ### Connect your host
 
-Keep the remote listener on loopback. Use an SSH local forward or an equivalent authenticated private connection from each client. Save the host pairing token in a file **owned by the client OS user and readable only by that user** (mode `0600`); never paste it into a repository or browser URL. The connector obtains its session cookie internally.
+Keep the DSH application listener on loopback. For access over a private network, place a certificate-verified HTTPS endpoint in front of it and connect each client to that private network. An SSH local forward remains an alternative. Save the host pairing token in a file **owned by the client OS user and readable only by that user** (mode `0600`); never paste it into a repository or browser URL. The connector obtains its session cookie internally.
 
 Merge this row into the desktop profile's own `cordis.patch.yml`, replacing the example port and token-file path:
 
@@ -74,7 +74,7 @@ Merge this row into the desktop profile's own `cordis.patch.yml`, replacing the 
         tokenFile: /absolute/path/to/private/host-token
 ```
 
-The port is illustrative. Use the local end of your tunnel when connecting to another machine. Our connector accepts loopback HTTP origins only; the tunnel provides encryption across machines. Never bind this example port to a public interface.
+The port is illustrative. For a private network, set `origin` to its HTTPS endpoint, for example `https://development.example:19443`. Certificates and hostnames are verified normally; there is no insecure TLS mode. Plain HTTP is accepted only on `127.0.0.1` for a same-machine host or the local end of an SSH tunnel. Keep the application and private entry point off public interfaces.
 
 Sign into the desired providers on the remote host. The usage plugin reuses the host's supported DSH OAuth records; subscriptions and provider credentials are not included in this bundle. Prefer an independent provider login for each host over copying rotating refresh tokens.
 
