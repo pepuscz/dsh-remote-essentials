@@ -7,6 +7,7 @@ A small, version-pinned setup for using the original DeepSeek Harness desktop ap
 ## What you get
 
 - One-click **Local / Remote** switching within the original desktop window.
+- File attachments transfer client-owned bytes to the selected remote host, instead of sending local filesystem references. Local mode keeps native behavior.
 - Compact **Claude / Codex account usage**, with reset countdown and exact local reset date in a tooltip. When figures are unavailable, the same panel keeps its provider and quota labels with empty rings and “—” values; the explanation stays in its tooltip.
 - **More → Import Sessions** for selective history imports, with project grouping and path remapping supported by the importer. Importing history does not copy project files or synchronize future conversations back to the original tool.
 
@@ -57,6 +58,16 @@ The setup command installs pinned components directly, then a configuration-only
 Open the desktop app once to initialize its profile, then fully quit it before installing the client. `desktop` and `web` are the default profile names; pass a profile name as the second argument to select another. Restart the relevant app/service afterward. The configuration tarball is retained under `$DSH_HOME/bundle-artifacts` (default `~/.dsh/bundle-artifacts`) so reinstalling from the profile lockfile can still find it. The command refuses profiles that already contain any of these components, so existing installations must be reviewed rather than overwritten. Installation is sequential, not transactional: if a step fails, inspect the profile before retrying.
 
 Installing does not create accounts, change file permissions, sign into providers, import sessions, or expose a port. Local mode is initially selected; the client has no configured remote hosts.
+
+### Update an existing desktop connector
+
+Quit the desktop app, then update only the connector to the reviewed revision:
+
+```sh
+dsh plugin --profile desktop add 'git+https://github.com/pepuscz/deepseek-harness-minimal-remote.git#2db6cf1b53a65c87ce0cf5c2eca3d354fe2e32b1' --ignore-scripts
+```
+
+Restart the app and select your remote host. Existing host labels, endpoint and pairing stay in the profile patch. Repeat on each desktop client; the server does not need this plugin. Pick or paste a small file to verify that it becomes a ready attachment before sending. Directory uploads are unsupported; zip them first. The upload hook currently provides pending/ready/error status rather than byte-progress percentages.
 
 ### Connect your host
 

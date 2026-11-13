@@ -1,5 +1,5 @@
 {
-  "@pepuscz/dsh-ssh-connector": "git+https://github.com/pepuscz/deepseek-harness-minimal-remote.git#d31ef18c1344945af3e7df230ab49bdb932199fa",
+  "@pepuscz/dsh-ssh-connector": "git+https://github.com/pepuscz/deepseek-harness-minimal-remote.git#2db6cf1b53a65c87ce0cf5c2eca3d354fe2e32b1",
   "@dougen/dsh-deepseek-usage": "git+https://github.com/pepuscz/dsh-deepseek-usage.git#fcf224d0fd6c50492b8de486845bf566346fa6ed",
   "dsh-chat-import": "git+https://github.com/pepuscz/dsh-chat-import.git#5f3b40989733c39c80e7fc08a0110ee534ad85c4"
 }
