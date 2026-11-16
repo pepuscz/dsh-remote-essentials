@@ -15,3 +15,25 @@ for (const dir of ['', 'host/']) {
   if (!dir) assert.match(patch, /hosts: \[\]/);
 }
 console.log('Pinned sources, no lifecycle hooks, and role defaults verified.');
+
+const index = JSON.parse(readFileSync(new URL('../index.json', import.meta.url)));
+assert.equal(index.format, 1);
+assert.deepEqual(index.plugins.map(p => p.name).sort(), Object.keys(pins).sort());
+for (const plugin of index.plugins) {
+  const seen = new Set();
+  for (const release of plugin.versions) {
+    assert.match(release.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
+    assert.ok(!seen.has(release.version), 'duplicate release version');
+    seen.add(release.version);
+    assert.ok(Number.isInteger(release.publishTimestamp) && release.publishTimestamp > 0);
+    assert.equal(release.source.type, 'git');
+    assert.match(release.source.commit, /^[a-f0-9]{40}$/);
+    const url = new URL(release.source.url);
+    assert.equal(url.protocol, 'https:');
+    assert.equal(url.hostname, 'github.com');
+    assert.equal(url.username + url.password + url.search + url.hash, '');
+  }
+  const current = plugin.versions[0].source;
+  assert.equal(`git+${current.url}#${current.commit}`, pins[plugin.name], 'index must match reviewed pins');
+}
+console.log('Native index sources and release pins verified.');

@@ -10,7 +10,7 @@ Each paired client is trusted to act through the remote host. Do not give the pa
 
 ## Network and authentication
 
-- Keep host listeners loopback-only. Cross-machine traffic goes through an authenticated encrypted tunnel. The connector permits only explicit loopback origins, not arbitrary internet URLs.
+- Keep host listeners loopback-only. Cross-machine traffic goes through an authenticated encrypted tunnel. The connector permits configured loopback origins or certificate-verified HTTPS origins. Keep remote endpoints on a private network.
 - Client-to-host credentials remain on the client host side, not in renderer boot data. Token files must be owner-only and owned by the current client user.
 - Remote requests use an authenticated namespace so local exact plugin routes cannot answer them accidentally. Unknown hosts, disallowed paths and failed connections do not fall back to Local.
 - Remote importer routes require DSH connection admission and POST. This is host-level admission, not fine-grained per-project authorization.
@@ -34,6 +34,12 @@ Conversation histories and project files are untrusted input. Preview selections
 `plugins.json` pins every directly installed plugin to a complete Git SHA. These pins identify source revisions, not a full cryptographic attestation of the entire DSH/npm dependency tree. Retain the package manager lockfile created on each installed profile. The importer pins its one runtime library; the other two plugins have no added npm runtime libraries.
 
 Install with lifecycle scripts disabled. Review any new dependency or lifecycle hook before changing that policy. Review upstream changes, run component tests and perform a clean-profile smoke test before moving pins. Never auto-follow a branch for deployed installs. The setup command packages its configuration bundle into a local tarball before installing it, avoiding a live source link. It does not disable DSH package-manager supply-chain policies.
+
+## Native update index
+
+`index.json` is served over HTTPS from this repository and advertises reviewed Git commits. It is mutable so DSH can discover newer releases; the installed source remains pinned. DSH asks for confirmation before installing an advertised update. Each new release needs a higher manifest version, and existing version-to-commit assignments must not be changed.
+
+Add the index only to profiles you intend to manage. The desktop connector belongs to the Local client profile; switching to Remote makes the plugin manager act on the remote host. A local `link:` or `file:` dependency needs a one-time conversion to a Git pin before native Git updates can work. The index adds no telemetry, credentials or automatic installer.
 
 ## Reporting
 

@@ -59,15 +59,30 @@ Open the desktop app once to initialize its profile, then fully quit it before i
 
 Installing does not create accounts, change file permissions, sign into providers, import sessions, or expose a port. Local mode is initially selected; the client has no configured remote hosts.
 
-### Update an existing desktop connector
+### Native updates (existing installations)
 
-Quit the desktop app, then update only the connector to the reviewed revision:
+Use DSH's built-in **Plugins → Discover** on each client. Switch to **Local** first: in Remote mode, the Plugins page manages the remote host, not your desktop connector.
+
+1. In **Plugins → Experimental plugins**, enable **Custom plugin indexes**.
+2. Open **Discover → Add index source** and add:
+
+   ```text
+   https://raw.githubusercontent.com/pepuscz/dsh-remote-essentials/main/index.json
+   ```
+
+3. Select **Remote Essentials**. Listed newer releases offer **Update**. Review the source and confirm; DSH installs an exact Git commit and requests a restart when needed. Refresh Discover to check again. This is a user-confirmed update flow, not a silent background updater.
+
+The index uses DSH's experimental native feature, with no extra updater, service or runtime dependency. It lists the individual plugins; the local role-configuration tarball is not an updateable index entry. Install the connector only on clients. Usage and importer versions belong to each profile where they are installed; updating one machine does not update others.
+
+**One-time migration from local copies.** `link:` and `file:` installs cannot use Git updates. Quit DSH, then replace the existing plugin dependency with the matching pinned source from `plugins.json` using the official command. For the connector:
 
 ```sh
 dsh plugin --profile desktop add 'git+https://github.com/pepuscz/deepseek-harness-minimal-remote.git#2db6cf1b53a65c87ce0cf5c2eca3d354fe2e32b1' --ignore-scripts
 ```
 
-Restart the app and select your remote host. Existing host labels, endpoint and pairing stay in the profile patch. Repeat on each desktop client; the server does not need this plugin. Pick or paste a small file to verify that it becomes a ready attachment before sending. Directory uploads are unsupported; zip them first. The upload hook currently provides pending/ready/error status rather than byte-progress percentages.
+Repeat for any usage/importer dependency installed from a local path, using its entry in `plugins.json`. Existing host labels, pairing and provider settings remain in the profile patch. Restart DSH, then add the index above. After this migration, use Discover for future releases. A Git install already pinned to the same repository does not need migration.
+
+File uploads must be updated on the client that selects the file. Reattach the file after restarting; an existing `@/path` reference cannot become an upload automatically. Directory uploads are unsupported; zip them first. The upload hook provides pending/ready/error status rather than byte-progress percentages.
 
 ### Connect your host
 
@@ -105,7 +120,8 @@ Read [SECURITY.md](SECURITY.md) before sharing a host. This is a **trusted singl
 - The composition contains no install lifecycle scripts and adds no implementation dependency beyond the selected plugins.
 - The connector and usage fork add no npm runtime dependencies. The importer uses `fzstd` pinned to `0.1.1`; DSH and its dependency tree remain part of the trusted runtime.
 - No credentials, machine identities, personal paths, histories or local endpoints are distributed here.
-- Update `plugins.json` deliberately after reviewing changes and testing both host and client. Keep the prior revision for rollback.
+- Update `plugins.json` and `index.json` together after reviewing changes and testing both host and client. Each new release must increment the plugin manifest version: Discover compares versions, not just commit hashes. Keep prior release entries for rollback, and never replace the commit assigned to an existing release version.
+- The mutable HTTPS index advertises releases; installations remain pinned to immutable Git commits. Adding the index does not authorize silent code installation. Avoid registry updates for these forks: their package names are shared with upstream projects.
 
 The forks retain the upstream package names so their public integration contracts remain compatible. Git URLs in `plugins.json` select our reviewed forks; installing an upstream npm package with the same name is a different artifact.
 

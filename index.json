@@ -1,0 +1,67 @@
+{
+  "format": 1,
+  "title": "Remote Essentials",
+  "description": "Reviewed, commit-pinned plugins for private remote DSH sessions. Updates use the native DSH plugin manager.",
+  "plugins": [
+    {
+      "name": "@pepuscz/dsh-ssh-connector",
+      "title": "Remote connection",
+      "description": "One-window Local / Remote switching and file uploads to a private DSH host.",
+      "homepage": "https://github.com/pepuscz/deepseek-harness-minimal-remote",
+      "repository": {
+        "url": "https://github.com/pepuscz/deepseek-harness-minimal-remote"
+      },
+      "versions": [
+        {
+          "version": "0.1.3",
+          "publishTimestamp": 1794835377,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/pepuscz/deepseek-harness-minimal-remote.git",
+            "commit": "2db6cf1b53a65c87ce0cf5c2eca3d354fe2e32b1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "@dougen/dsh-deepseek-usage",
+      "title": "Account usage",
+      "description": "Compact Claude and Codex subscription usage with reset details.",
+      "homepage": "https://github.com/pepuscz/dsh-deepseek-usage",
+      "repository": {
+        "url": "https://github.com/pepuscz/dsh-deepseek-usage"
+      },
+      "versions": [
+        {
+          "version": "0.20.0",
+          "publishTimestamp": 1794835377,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/pepuscz/dsh-deepseek-usage.git",
+            "commit": "fcf224d0fd6c50492b8de486845bf566346fa6ed"
+          }
+        }
+      ]
+    },
+    {
+      "name": "dsh-chat-import",
+      "title": "Session import",
+      "description": "Selective conversation imports with project grouping and path remapping.",
+      "homepage": "https://github.com/pepuscz/dsh-chat-import",
+      "repository": {
+        "url": "https://github.com/pepuscz/dsh-chat-import"
+      },
+      "versions": [
+        {
+          "version": "0.26.4",
+          "publishTimestamp": 1794835377,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/pepuscz/dsh-chat-import.git",
+            "commit": "5f3b40989733c39c80e7fc08a0110ee534ad85c4"
+          }
+        }
+      ]
+    }
+  ]
+}
